@@ -1,9 +1,7 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Float
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.sql import func
+from core.database import Base
 
-Base = declarative_base()
 
 class User(Base):
     __tablename__ = 'user'
@@ -16,4 +14,4 @@ class User(Base):
     update_at = Column(DateTime(timezone=True), onupdate=func.now())
     access_token = Column(String)
     refresh_token = Column(String)
-    
+
