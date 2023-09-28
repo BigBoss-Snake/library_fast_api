@@ -11,3 +11,8 @@ class UserCreateSchema(BaseModel):
     email: EmailStr
     password: constr(min_length=7)
 
+
+class SigninUserSchema(BaseModel):
+    email: str
+    access_token: str
+

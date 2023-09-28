@@ -6,7 +6,7 @@ from services.user_services import (
         create_user,
         check_user
     )
-from core.schema.user import UserCreateSchema, UserSchema
+from core.schema.user import UserCreateSchema, UserSchema, SigninUserSchema
 
 
 router = APIRouter()
@@ -17,7 +17,7 @@ async def signup(user: UserCreateSchema, db: Session = Depends(get_db)):
     return response
 
 
-@router.post('/signin', response_model=UserSchema, tags=['User'])
+@router.post('/signin', response_model=SigninUserSchema, tags=['User'])
 async def signin(user: UserCreateSchema, db: Session = Depends(get_db)):
     response = check_user(db, user)
     return response

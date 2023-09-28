@@ -1,3 +1,4 @@
+from services.token_services import generate_access_token
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
@@ -29,5 +30,9 @@ def check_user(db: Session, user: UserCreateSchema):
         raise HTTPException(status_code=422, detail=f"Email or password entered incorrectly")
     elif check_user_password(db_user.password, user.password):
         raise HTTPException(status_code=422, detail=f"Email or password entered incorrectly")
-    
-    return db_user
+    generate_access_token(db_user)
+    response = {
+                   "access_token": generate_access_token(db_user), 
+                   "email": db_user.email
+               }
+    return response

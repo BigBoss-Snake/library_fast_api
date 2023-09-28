@@ -22,7 +22,6 @@ def create_category_article(db: Session, category_article: CategoryArticleCreate
     db.add(db_category_article)
     db.commit()
     db.refresh(db_category_article)
-    link_article_and_category_article()
     return db_category_article
 
 
