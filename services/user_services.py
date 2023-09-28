@@ -1,36 +1,33 @@
-from core.database import Session
+from sqlalchemy.orm import Session
+from fastapi import HTTPException
 
-from . import models, schemas
+from core.schema.user import UserCreateSchema
+from core.models.user import User
+from services.validate import validate_email, check_user_password
 
 
 def get_user(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    return db.query(User).filter(User.id == user_id).first()
 
 
 def get_user_by_email(db: Session, email: str):
-    return db.query(models.User).filter(models.User.email == email).first()
+    return db.query(User).filter(User.email == email).first()
 
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
-
-
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: UserCreateSchema):
+    validate_email(db, user.email)
     fake_hashed_password = user.password + "notreallyhashed"
-    db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
+    db_user = User(email=user.email,password=fake_hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
-
-
-def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-    db_item = models.Item(**item.dict(), owner_id=user_id)
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    return db_item
+def check_user(db: Session, user: UserCreateSchema):
+    db_user = get_user_by_email(db, user.email)
+    if not db_user:
+        raise HTTPException(status_code=422, detail=f"Email or password entered incorrectly")
+    elif check_user_password(db_user.password, user.password):
+        raise HTTPException(status_code=422, detail=f"Email or password entered incorrectly")
+    
+    return db_user
