@@ -18,14 +18,14 @@ class CategoryArticleItemSchema(BaseModel):
 
 
 class ArticleSchema(ArticleItemSchema):
-    category_article: list[CategoryArticleItemSchema] = []
+    categorys: list[CategoryArticleItemSchema] = []
 
     class Config:
         orm_mode = True
 
 
 class CategoryArticleSchema(CategoryArticleItemSchema):
-    article: list[ArticleItemSchema] = []
+    articles: list[ArticleItemSchema] = []
 
     class Config:
         orm_mode = True
@@ -35,8 +35,6 @@ class ArticleCreateSchema(BaseModel):
     name: str
     description: str
     link: str 
-    created_at: datetime.datetime
-    update_at: datetime.datetime
     category_article: list[int]
 
     class Config:

@@ -39,7 +39,7 @@ def update_category_article(db: Session, category_article_id: int , category_art
 def destroy_category_article(db: Session, category_article_id: int):
     db_category_article = db.query(CategoryArticle).filter(CategoryArticle.id == category_article_id).first()
     check_category_article(db_category_article, category_article_id)
-
+    
     db.delete(db_category_article)
     db.commit()
     return db_category_article
