@@ -1,10 +1,10 @@
-from services.token_services import generate_access_token
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 
+from services.token_services import generate_access_token
 from core.schema.user import UserCreateSchema
 from core.models.user import User
-from services.validate import validate_email, check_user_password
+from .validate import validate_email, check_user_password
 
 
 def get_user(db: Session, user_id: int):
@@ -17,8 +17,8 @@ def get_user_by_email(db: Session, email: str):
 
 def create_user(db: Session, user: UserCreateSchema):
     validate_email(db, user.email)
-    fake_hashed_password = user.password + "notreallyhashed"
-    db_user = User(email=user.email,password=fake_hashed_password)
+    fake_hashed_password = user.password + 'notreallyhashed'
+    db_user = User(email=user.email, password=fake_hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -32,7 +32,7 @@ def check_user(db: Session, user: UserCreateSchema):
         raise HTTPException(status_code=422, detail=f"Email or password entered incorrectly")
     generate_access_token(db_user)
     response = {
-                   "access_token": generate_access_token(db_user), 
-                   "email": db_user.email
+                   'access_token': generate_access_token(db_user), 
+                   'email': db_user.email
                }
     return response

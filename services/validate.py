@@ -19,5 +19,5 @@ def validate_email(db: Session, email: str) -> str:
 
 
 def check_user_password(db_password: str, request_password: str) -> bool:
-    request_password = request_password + "notreallyhashed"
+    request_password = request_password + 'notreallyhashed'
     return db_password != request_password 

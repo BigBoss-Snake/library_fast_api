@@ -1,5 +1,5 @@
+import os
 from jose import jwt
-import os 
 from fastapi import HTTPException
 from datetime import datetime, timedelta
 
@@ -23,5 +23,5 @@ def check_valid_token(access_token: str):
     
     time_now = int(datetime.now().strftime('%s'))
     if time_now > payload['exp']:
-        raise HTTPException(status_code=403, detail=f"Access token is dead")
+        raise HTTPException(status_code=403, detail='Access token is dead')
 

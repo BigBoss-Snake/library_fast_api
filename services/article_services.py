@@ -1,4 +1,4 @@
-from services.validate import check_article, check_category_article
+from .validate import check_article, check_category_article
 from sqlalchemy.orm import Session
 import datetime
 
@@ -25,7 +25,7 @@ def create_new_article(db: Session, article: ArticleCreateSchema):
     db_article = Article(name=article.name, description=article.description, 
                          link=article.link, created_at=datetime.datetime.now(),
                          update_at=datetime.datetime.now())
-    for category in article.category_article:
+    for category in article.categorys:
         db_category_article = db.query(CategoryArticle).filter(CategoryArticle.id == category).first()
         check_category_article(db_category_article, category)
         db_article.categorys.append(db_category_article)
@@ -39,8 +39,9 @@ def update_article(db: Session, article_id: int , article: ArticleUpdateSchema):
     db_article = db.query(Article).filter(Article.id == article_id).first()
     check_article(db_article, article_id)
     for var, value in vars(article).items():
-        setattr(db_article, var, value) if value else None
-    for category in article.category_article:
+        if var != 'categorys':
+            setattr(db_article, var, value) if value else None
+    for category in article.categorys:
         db_category_article = db.query(CategoryArticle).filter(CategoryArticle.id == category).first()
         check_category_article(db_category_article, category)
         db_article.categorys.append(db_category_article)

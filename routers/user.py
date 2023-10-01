@@ -12,12 +12,14 @@ from core.schema.user import UserCreateSchema, UserSchema, SigninUserSchema
 router = APIRouter()
 
 @router.post('/signup', response_model=UserSchema, tags=['User'])
-async def signup(user: UserCreateSchema, db: Session = Depends(get_db)):
+async def signup(user: UserCreateSchema, 
+                 db: Session = Depends(get_db)):
     response = create_user(db, user)
     return response
 
 
 @router.post('/signin', response_model=SigninUserSchema, tags=['User'])
-async def signin(user: UserCreateSchema, db: Session = Depends(get_db)):
+async def signin(user: UserCreateSchema, 
+                 db: Session = Depends(get_db)):
     response = check_user(db, user)
     return response

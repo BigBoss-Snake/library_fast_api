@@ -35,7 +35,7 @@ class ArticleCreateSchema(BaseModel):
     name: str
     description: str
     link: str 
-    category_article: list[int]
+    categorys: list[int]
 
     class Config:
         orm_mode = True
@@ -45,16 +45,16 @@ class ArticleUpdateSchema(BaseModel):
     name: str | None = None
     description: str | None = None
     link: str | None = None
-    category_article: list[int] | None = None
+    categorys: list[int] | None = None
 
 
 class CategoryArticleCreateSchema(BaseModel):
     name: str
-    article: list[int]
+    articles: list[int]
 
     class Config:
         orm_mode = True
 
 class CategoryArticleUpdateSchema(BaseModel):
     name: str | None = None
-    article: list[int] | None = None
+    articles: list[int] | None = None
